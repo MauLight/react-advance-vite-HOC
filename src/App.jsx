@@ -1,35 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useState, useEffect } from 'react';
+
+//Create the HOC outside the component
+
+const withMousePosition = (WrappedComponent) => {
+  return (props) => {
+
+    const [mousePosition, setMousePosition] = useState({
+      x: 0,
+      y: 0
+    })
+
+    useEffect(() => {
+
+      const handleMousePositionChange = (e) => {
+        setMousePosition({
+          x: e.clientX,
+          y: e.clientY
+        })
+      }
+
+      window.addEventListener('mousemove', handleMousePositionChange); //Add listener on mount
+
+      return () => {
+        window.removeEventListener('mousemove', handleMousePositionChange); //Remove listener on unmount
+      }
+
+    }, [])
+
+    return <WrappedComponent {...props} mousePosition={mousePosition} />   // props refers to all the original props of the component
+  };
+};
+
+const PanelMouseLogger = ({ mousePosition }) => {
+  if (!mousePosition) {
+    return null;
+  }
+  return (
+    <div className='BasicTracker'>
+      <p>Mouse Position:</p>
+      <div className='row'>
+        <span>x: {mousePosition.x}</span>
+        <span>y: {mousePosition.y}</span>
+      </div>
+    </div>
+  );
+};
+
+const PointMouseLogger = ({ mousePosition }) => {
+  if (!mousePosition) {
+    return null;
+  }
+  return (
+    <p>
+      ({mousePosition.x}, {mousePosition.y})
+    </p>
+  );
+};
+
+const PanelMouseTracker = withMousePosition(PanelMouseLogger); //Create enhanced versions of Components
+const PointMouseTracker = withMousePosition(PointMouseLogger);
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <div className='App'>
+      <header className='Header'>Little Mau Restaurant 🍕 </header>
+      <PanelMouseTracker />
+      <PointMouseTracker />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
