@@ -1,6 +1,7 @@
 import './App.css'
 import { useState, useEffect } from 'react';
 import { LemonApp } from './lemon';
+import WithPropsApp from './withProps';
 
 //Create the HOC outside the component
 
@@ -65,10 +66,11 @@ const PointMouseTracker = withMousePosition(PointMouseLogger);
 function App() {
   return (
     <div className='App'>
-      <header className='Header'>Little Mau Restaurant 🍕 </header>
+      <h1 className='Header'>Little Mau Restaurant 🍕 </h1>
       <PanelMouseTracker />
       <PointMouseTracker />
       <LemonApp />
+      <WithPropsApp />
     </div>
   );
 }
