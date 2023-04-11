@@ -1,5 +1,6 @@
 import './App.css'
 import { useState, useEffect } from 'react';
+import { LemonApp } from './lemon';
 
 //Create the HOC outside the component
 
@@ -67,6 +68,7 @@ function App() {
       <header className='Header'>Little Mau Restaurant 🍕 </header>
       <PanelMouseTracker />
       <PointMouseTracker />
+      <LemonApp />
     </div>
   );
 }
